@@ -1,9 +1,13 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
+import Dial from '../dial/dial'
+import './more.styl'
 
+import long from '../../assets/bg3.png'
 
-
+import phone from '../../assets/phone.png'
+import video from '../../assets/video.png'
 
 class More extends Component {
   config = {
@@ -22,7 +26,10 @@ class More extends Component {
 
   render() {
     return (
-      <View>1234</View>
+      <View className='moreWrapper'>
+        <Image className='long' src={long}/>
+        <Dial/>
+      </View>
     );
   }
 }

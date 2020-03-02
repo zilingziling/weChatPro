@@ -19,8 +19,8 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/form/form',
       'pages/more/more',
+      'pages/form/form',
       'pages/dial/dial',
       'pages/index/index',
     ],

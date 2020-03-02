@@ -5,8 +5,7 @@ import { connect } from "@tarojs/redux";
 import './form.styl'
 
 
-
-class Form extends Component {
+class MyForm extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
   };
@@ -27,18 +26,9 @@ class Form extends Component {
           <Text className='info'>欢迎您的光临！</Text>
         <Text className='info'>通过嘉寓天幕线上展厅留言</Text>
         <Text className='info'>到店即可独享5000元购房抵用券</Text>
-        <AtForm
-        >
-          <AtInput
-            name='value'
-            title='文本'
-            type='text'
-            placeholder='单行文本'
-          />
-        </AtForm>
       </View>
     );
   }
 }
 
-export default Form;
+export default MyForm;
