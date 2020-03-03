@@ -2,10 +2,10 @@
 .formWraper
   width 100vw
   height 100vh
-  background url("../../assets/bg2.png") center/cover no-repeat
+  background url("http://39.98.67.142/assets/bg2.jpg") center/cover no-repeat
   text-align center
   box-sizing border-box
-  padding-top 100px
+  padding-top 70px
   .info
     font-size:38px;
     font-family:FZLTZHUNHK;
@@ -14,3 +14,130 @@
     white-space nowrap
     display block
     margin-bottom 8px
+  .formContent
+    width:580px;
+    margin auto
+    margin-top 50px
+    .inputWrapper
+      width:580px;
+      height:73px;
+      border 1px solid #ffffff
+      display flex
+      justify-content space-between
+      align-items center
+      margin-bottom: 14px
+      position relative
+      .title
+        width fit-content
+        font-size:38px;
+        font-family:FZLTZHUNHK;
+        font-weight:normal;
+        color:rgba(252,252,254,1);
+        border-right 1px solid #ffffff
+        white-space nowrap
+        letter-spacing 2px
+        box-sizing border-box
+        padding 0 20px
+      .input
+        //min-width 200px
+        color:#ffffff
+      .want
+        width 100px
+        position absolute
+        bottom -100px
+        right: -2px
+        z-index 100
+        box-sizing border-box
+        padding 0 10px
+        border-radius 4px
+        background #ffffff
+        .selectOption
+          color #000000
+          text-align right
+          border-bottom 1px solid #000000
+          line-height 50px
+          font-family:FZLTZHUNHK;
+          &:last-child
+            border-bottom 1px solid transparent
+      .money
+        width 200px
+        position absolute
+        bottom -201px
+        right: -2px
+        z-index 100
+        box-sizing border-box
+        padding 0 10px
+        border-radius 4px
+        background #ffffff
+        .selectOption
+          color #000000
+          text-align right
+          border-bottom 1px solid #000000
+          line-height 50px
+          font-family:FZLTZHUNHK;
+          &:last-child
+            border-bottom 1px solid transparent
+
+
+
+      .icon
+        background url("../../assets/down.png") center/cover no-repeat
+        width 40px
+        height 40px
+        position absolute
+        right: 10px
+
+  .label
+    margin-top 20px
+    checkBox
+      font-size:25px;
+      font-family:FZLTZHUNHK;
+      font-weight:normal;
+      color:rgba(252,252,254,1);
+      white-space nowrap;
+      .wx-checkbox-input
+        width 32px
+        height 32px
+  .toSec
+    width:583px;
+    height:83px;
+    margin auto
+    display flex
+    align-items center
+    justify-content center
+    background rgb(102,119,223)
+    margin-bottom 10px
+    margin-top 30px
+    .click
+      font-size:37px;
+      font-family:FZLTZHUNHK;
+      font-weight:normal;
+      color:rgba(252,252,254,1);
+      letter-spacing 4px
+  .time
+      color #ffffff
+      font-family:FZLTZHUNHK;
+      white-space nowrap
+      font-size 20px
+
+@keyframes slide-down{
+  0%{transform:scale(1,0);}
+  100%{transform:scale(1,1);}
+}
+
+@-webkit-keyframes slide-down{
+  0%{-webkit-transform:scale(1,0);}
+  100%{-webkit-transform:scale(1,1);}
+}
+
+.show {
+  transition: max-height .2s ease-in;
+  transform-origin: 50% 0;
+  animation: slide-down 0.2s ease-in;
+  -webkit-animation: slide-down 0.2s ease-in;
+}
+
+.hidden {
+  overflow: auto;
+  transition: max-height .2s ease-out;
+}

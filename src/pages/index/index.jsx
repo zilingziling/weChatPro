@@ -3,16 +3,6 @@ import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 
 import "./index.styl";
 
-import a from "../../assets/A88.jpg";
-import a1 from "../../assets/A1.jpg";
-import b from "../../assets/B.jpg";
-import b1 from "../../assets/B1.jpg";
-import c from "../../assets/C.jpg";
-import c1 from "../../assets/C1.jpg";
-import e from "../../assets/E.jpg";
-import e1 from "../../assets/E1.jpg";
-import f from "../../assets/F.jpg";
-import f1 from "../../assets/F1.jpg";
 
 
 class Index extends Component {
@@ -42,11 +32,11 @@ class Index extends Component {
   render() {
     return (
       <View className="index">
-        <View className="toSec">
-          <Text className="click" onClick={this.toDial}>点击进入接待</Text>
+        <View className="toSec" onClick={this.toDial}>
+          <Text className="click" >点击进入接待</Text>
         </View>
-        <View className="toMore">
-          <Text className="more" onClick={this.toMore}>项目精述 · 查看更多</Text>
+        <View className="toMore" onClick={this.toMore}>
+          <Text className="more" >项目精述 · 查看更多</Text>
         </View>
         <Swiper
           className="swiper"
@@ -54,25 +44,26 @@ class Index extends Component {
           indicatorActiveColor="#333"
           circular
           indicatorDots
+          autoplay
         >
           <SwiperItem className="swiperItem">
             <View className="item">
-              <View className="imgWraper">
-                <Image className="img" src={a} />
+              <View className="imgWraper" >
+                <Image className="img" src='http://39.98.67.142/assets/A88.jpg' />
               </View>
               <Text className="type">二室二厅一卫</Text>
               <Text className="p">建筑面积：约88㎡</Text>
             </View>
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={a1} />
+                <Image className="img" src='http://39.98.67.142/assets/A1.jpg' />
               </View>
               <Text className="type">一室二厅一卫</Text>
               <Text className="p">建筑面积：约69.5㎡</Text>
             </View>
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={b} />
+                <Image className="img" src='http://39.98.67.142/assets/B.jpg' />
               </View>
               <Text className="type">一室二厅一卫</Text>
               <Text className="p">建筑面积：约68㎡</Text>
@@ -81,21 +72,21 @@ class Index extends Component {
           <SwiperItem className="swiperItem">
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={b1} />
+                <Image className="img" src='http://39.98.67.142/assets/B1.jpg' />
               </View>
               <Text className="type">一室二厅一卫</Text>
               <Text className="p">建筑面积：约53.49㎡</Text>
             </View>
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={c} />
+                <Image className="img" src='http://39.98.67.142/assets/C.jpg' />
               </View>
               <Text className="type">一室一厅一卫</Text>
               <Text className="p">建筑面积：约43㎡</Text>
             </View>
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={c1} />
+                <Image className="img" src='http://39.98.67.142/assets/C1.jpg' />
               </View>
               <Text className="type">一室一厅一卫</Text>
               <Text className="p">建筑面积：约47㎡</Text>
@@ -104,21 +95,21 @@ class Index extends Component {
           <SwiperItem className="swiperItem">
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={e} />
+                <Image className="img" src='http://39.98.67.142/assets/E.jpg' />
               </View>
               <Text className="type">一室一厅一卫</Text>
               <Text className="p">建筑面积：约36㎡</Text>
             </View>
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={e1} />
+                <Image className="img" src='http://39.98.67.142/assets/E1.jpg' />
               </View>
               <Text className="type">一室一厅一卫</Text>
               <Text className="p">建筑面积：约28㎡</Text>
             </View>
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={f} />
+                <Image className="img" src='http://39.98.67.142/assets/F.jpg' />
               </View>
               <Text className="type">一室一厅一卫</Text>
               <Text className="p">建筑面积：约40㎡</Text>
@@ -127,7 +118,7 @@ class Index extends Component {
           <SwiperItem className="swiperItem">
             <View className="item">
               <View className="imgWraper">
-                <Image className="img" src={f1} />
+                <Image className="img" src='http://39.98.67.142/assets/F1.jpg' />
               </View>
               <Text className="type">一室一厅一卫</Text>
               <Text className="p">建筑面积：约31㎡</Text>

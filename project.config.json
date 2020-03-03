@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "weChatPro",
   "description": "a pro ",
-  "appid": "touristappid",
+  "appid": "wx9a557538b9e30bf4",
   "setting": {
     "urlCheck": true,
     "es6": false,

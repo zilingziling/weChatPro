@@ -5,7 +5,7 @@ import Index from './pages/index'
 
 import configStore from './store'
 
-import './app.styl'
+import './app.scss'
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -19,17 +19,18 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/more/more',
       'pages/form/form',
-      'pages/dial/dial',
       'pages/index/index',
+      'pages/more/more',
+      'pages/dial/dial'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
-    }
+    },
+
   }
 
   componentDidMount () {}
