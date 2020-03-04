@@ -1,10 +1,9 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
-import { AtButton } from "taro-ui";
+import { AtButton  } from "taro-ui";
 import { connect } from "@tarojs/redux";
 import classNames from "classnames";
 import "./form.styl";
-
 class MyForm extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
@@ -24,60 +23,80 @@ class MyForm extends Component {
     wantShow: false,
     money: [
       {
-        id: 1,
+        id: 0,
         value: "50万以内"
       },
       {
-        id: 2,
+        id: 1,
         value: "50~100万"
       },
       {
-        id: 3,
+        id: 2,
         value: "100~150万"
       },
       {
-        id: 4,
+        id: 3,
         value: "150~200万"
       }
     ],
     want: [
       {
-        id: 1,
+        id: 0,
         value: "自住"
       },
       {
-        id: 2,
+        id: 1,
         value: "投资"
       }
     ],
     moneySelect: "",
     wantSelect: "",
-    wantId: "",
-    moneyId: ""
+    purchaseIntention: "",
+    purchaseBudget: "",
+    name:'',
+    phone:'',
+    agree:false,
   };
-  handleWant() {
+  handleWant=()=>{
     this.setState({
       wantShow: !this.state.wantShow,
       moneyShow: false
     });
   }
-  handleMoney() {
+  handleMoney=()=>{
     this.setState({
       moneyShow: !this.state.moneyShow,
       wantShow: false
     });
   }
-  onSelectWant(item) {
+  onSelectWant=(item)=> {
     this.setState({
       wantSelect: item.value,
-      wantShow: false
+      wantShow: false,
+      purchaseIntention:item.id
     });
   }
-  onSelectMoney(item) {
+  onSelectMoney=(item)=>{
     this.setState({
       moneySelect: item.value,
-      moneyShow: false
+      moneyShow: false,
+      purchaseBudget:item.id
     });
+  }
+   inputName=e=>{
+     this.setState({
+       name:e.target.value
+     })
+  }
+  inputPhone=e=>{
+    this.setState({
+      phone:e.target.value
+    })
+  }
+  onCheck=()=>{
+    this.setState({
+      agree:!this.state.agree
+    })
   }
   render() {
     return (
@@ -89,19 +108,19 @@ class MyForm extends Component {
           <View className="inputWrapper">
             <View className="title">姓名</View>
             <View className="input">
-              <input maxLength="10" type="text" cursor="0" />
+              <Input onInput={this.inputName} maxLength="10" type="text" cursor="0" value={this.state.name}/>
             </View>
           </View>
           <View className="inputWrapper">
             <View className="title">电话</View>
             <View className="input">
-              <input maxLength="11" type="number" cursor="0" />
+              <Input onInput={this.inputPhone} maxLength="11" type="number" cursor="0" value={this.state.phone}/>
             </View>
           </View>
           <View className="inputWrapper" onClick={this.handleWant}>
             <View className="title">购买意向</View>
             <View className="input">
-              <input disabled value={this.state.wantSelect} />
+              <Input disabled value={this.state.wantSelect} />
             </View>
             {this.state.wantShow && (
               <View className={classNames('want',this.state.wantShow?'show':'hidden',
@@ -123,7 +142,7 @@ class MyForm extends Component {
           <View className="inputWrapper" onClick={this.handleMoney}>
             <View className="title">购买预算</View>
             <View className="input">
-              <input disabled value={this.state.moneySelect} />
+              <Input disabled value={this.state.moneySelect} />
             </View>
             {this.state.moneyShow && (
               <View className={classNames('money',this.state.moneyShow?'show':'hidden',
@@ -143,13 +162,15 @@ class MyForm extends Component {
             <View className="icon"></View>
           </View>
         </View>
-        <View className="label">
+        <View className='label' onClick={this.onCheck}>
+          <checkbox-group >
           <label>
             <checkbox  >
               我已阅读并同意个人信息隐私政策
             </checkbox>
           </label>
-        </View>
+          </checkbox-group>
+      </View>
         <View className="toSec">
           <Text className="click">点击进入接待</Text>
         </View>

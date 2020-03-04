@@ -1,12 +1,20 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import "./dial.styl";
-
+import api from '../../service/api'
 class Contact extends Component {
   toForm(){
-    Taro.navigateTo({
-      url: '/pages/form/form'
-    })
+    // api.get('/customers/status').then(r=>{
+    //   if(r.data.result){
+    //     if(r.data.data.saved){
+    //         console.log('saved')
+    //     }else {
+          Taro.navigateTo({
+            url: '/pages/form/form'
+          })
+    //     }
+    //   }
+    // })
   }
   render() {
     return (

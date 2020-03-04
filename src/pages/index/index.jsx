@@ -3,7 +3,7 @@ import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 
 import "./index.styl";
 
-
+import api from '../../service/api'
 
 class Index extends Component {
   config = {
@@ -13,16 +13,35 @@ class Index extends Component {
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
   }
-
-  componentWillUnmount() {}
-
-  componentDidShow() {}
-
+  componentDidMount(){
+    wx.login({
+      success (res) {
+        if (res.code) {
+          //发起网络请求
+         api.get('/auth/token', {js_code:res.code}).then(r=>{
+           if(r.data.result){
+             wx.setStorage({
+               key:"token",
+               data:r.data.data.accessToken
+             });
+           }
+         })
+        } else {
+          console.log(res.errMsg)
+        }
+      }
+    })
+  }
+  // wx.showToast({
+  //                title: '成功',
+  //                icon: 'success',
+  //                duration: 2000
+  //              })
   componentDidHide() {}
   toDial(){
-    Taro.navigateTo({
-      url: '/pages/dial/dial'
-    })
+      Taro.navigateTo({
+        url: '/pages/dial/dial'
+      })
   }
   toMore(){
     Taro.navigateTo({
