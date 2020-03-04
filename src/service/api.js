@@ -7,7 +7,6 @@ let token = "";
 export default {
   baseOptions(params, method = "GET") {
     let { url, data } = params;
-
     wx.getStorage({
       key: "token",
       success(res) {
@@ -47,8 +46,8 @@ export default {
     let option = { url, data };
     return this.baseOptions(option);
   },
-  post: function(url, data, contentType) {
-    let params = { url, data, contentType };
+  post: function(url, data) {
+    let params = { url, data };
     return this.baseOptions(params, "POST");
   }
 };

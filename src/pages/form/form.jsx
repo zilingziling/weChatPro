@@ -98,6 +98,11 @@ class MyForm extends Component {
       agree:!this.state.agree
     })
   }
+  toVideo=()=>{
+    Taro.navigateTo({
+      url: '/pages/video/video'
+    })
+  }
   render() {
     return (
       <View className="formWraper">
@@ -172,7 +177,7 @@ class MyForm extends Component {
           </checkbox-group>
       </View>
         <View className="toSec">
-          <Text className="click">点击进入接待</Text>
+          <Text className="click" onClick={this.toVideo}>点击进入接待</Text>
         </View>
         <Text className="time">服务时间：am9:00-pm18:00</Text>
       </View>

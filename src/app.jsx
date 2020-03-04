@@ -19,10 +19,14 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/form/form',
       'pages/index/index',
+      'pages/video/video',
+
+      'pages/form/form',
+
       'pages/more/more',
-      'pages/dial/dial'
+      'pages/dial/dial',
+
     ],
     window: {
       backgroundTextStyle: 'light',
