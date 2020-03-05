@@ -6,6 +6,7 @@ class Contact extends Component {
   toForm=()=>{
     api.get('/customers/status').then(r=>{
       if(r.data.result){
+        console.log(r.data.data)
         if(r.data.data.saved){
           Taro.navigateTo({
             url: '/pages/video/video'

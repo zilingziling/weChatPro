@@ -10,7 +10,7 @@ class Index extends Component {
     navigationBarTitleText: "嘉寓天幕线上展厅"
   };
   state={
-    server:null
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,11 +26,8 @@ class Index extends Component {
              wx.setStorageSync('token', res.data.data.accessToken)
              api.get('/auth/current').then(r=>{
                if(r.data.result){
-                 wx.setStorageSync('customer', Boolean.parseBoolean(r.data.data.customer))
-                 wx.setStorageSync('server', Boolean.parseBoolean(r.data.data.server))
-                 this.setState({
-                   server:Boolean.parseBoolean(r.data.data.server)
-                 })
+                 wx.setStorageSync('customer', r.data.data.customer)
+                 wx.setStorageSync('server', r.data.data.server)
                }
              })
            }
@@ -47,11 +44,10 @@ class Index extends Component {
 
 
   render() {
-    console.log(this.state.server)
+    console.log(wx.getStorageSync('server'))
     return (
     <View>
-      {/*<ClientIndex />*/}
-      {this.state.server ? <ServerIndex /> : <ClientIndex />}
+      {wx.getStorageSync('server')==='TRUE' ? <ServerIndex /> : <ClientIndex />}
     </View>
     )
   }

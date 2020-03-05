@@ -1,14 +1,15 @@
 import Taro, { Component } from "@tarojs/taro";
 import api from "../../service/api";
 import './video.styl'
-
+import ServerVideo from '../../components/serverIndex/serverIndex'
+import ClientVideo from '../../components/clicentIndex/clientIndex'
 class VideoPage extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
   };
   state = {
     videoCallId: "",
-    pullRtmpUrl:'',
+    pullRtmpUrl:'rtmp://39.98.67.142/rtmpt',
     pushRtmpUrl:''
   };
   componentWillReceiveProps(nextProps) {
@@ -38,19 +39,17 @@ class VideoPage extends Component {
   componentDidHide() {}
 
   render() {
+    const props={
+      pullRtmpUrl:this.state.pullRtmpUrl,
+      pushRtmpUrl:this.state.pushRtmpUrl
+    }
     return (
-      <View className="videoWrapper">
-        <live-player
-          // src={this.state.string}
-          src="rtmp://39.98.67.142/rtmpt"
-          mode="RTC"
-          autoplay
-          bindstatechange="statechange"
-          binderror="error"
-          style="width: 100vw; height: 40vh;over-flow:hidden"
-        />
-            <Image className='answer' src='http://39.98.67.142/assets/answer.png'/>
+      <View>
+        {
+          wx.getStorageSync('server')==='TRUE'?<ServerVideo {...props}/>:<ClientVideo {...props}/>
+        }
       </View>
+
     );
   }
 }

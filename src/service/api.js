@@ -9,7 +9,7 @@ export default {
     let { url, data } = params;
      token = wx.getStorageSync('token')
     console.log(token);
-    let contentType = "application/x-www-form-urlencoded";
+    let contentType = "application/json";
     contentType = params.contentType || contentType;
     const option = {
       isShowLoading: false,
