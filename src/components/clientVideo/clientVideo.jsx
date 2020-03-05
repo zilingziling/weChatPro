@@ -1,8 +1,9 @@
 import Taro, { Component } from "@tarojs/taro";
-
+import '../video.styl'
 class ClientVideo extends Component{
+  render(){
   const {pullRtmpUrl,pushRtmpUrl}=this.props
-render(){
+
   return (
     <View className="videoWrapper">
       <live-pusher  url={pushRtmpUrl} mode="RTC" autopush bindstatechange="statechange" style="width: 300px; height: 225px;" />

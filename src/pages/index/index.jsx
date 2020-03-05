@@ -47,7 +47,8 @@ class Index extends Component {
     console.log(wx.getStorageSync('server'))
     return (
     <View>
-      {wx.getStorageSync('server')==='TRUE' ? <ServerIndex /> : <ClientIndex />}
+      <ClientIndex />
+      {/*{wx.getStorageSync('server')==='TRUE' ? <ServerIndex /> : <ClientIndex />}*/}
     </View>
     )
   }

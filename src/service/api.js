@@ -8,7 +8,6 @@ export default {
   baseOptions(params, method = "GET") {
     let { url, data } = params;
      token = wx.getStorageSync('token')
-    console.log(token);
     let contentType = "application/json";
     contentType = params.contentType || contentType;
     const option = {
@@ -17,6 +16,7 @@ export default {
       url: base + url,
       data: data,
       method: method,
+      networkTimeout:params.timeout||6000000,
       header: token
         ? { "content-type": contentType, Authorization: `Bearer ${token}` }
         : { "content-type": contentType },
@@ -49,4 +49,8 @@ export default {
     let params = { url, data };
     return this.baseOptions(params, "PUT");
   },
+  del: function(url, data) {
+    let params = { url, data };
+    return this.baseOptions(params, "DELETE");
+  }
 };
