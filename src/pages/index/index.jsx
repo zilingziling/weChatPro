@@ -2,7 +2,6 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import ClientIndex from '../../components/clicentIndex/clientIndex'
 import  ServerIndex from '../../components/serverIndex/serverIndex'
-import "./index.styl";
 
 import api from '../../service/api'
 
@@ -50,12 +49,11 @@ class Index extends Component {
   render() {
     console.log(this.state.server)
     return (
-      <View>
-        {
-          this.state.server?<ServerIndex/>:<ClientIndex/>
-        }
-      </View>
-    );
+    <View>
+      {/*<ClientIndex />*/}
+      {this.state.server ? <ServerIndex /> : <ClientIndex />}
+    </View>
+    )
   }
 }
 

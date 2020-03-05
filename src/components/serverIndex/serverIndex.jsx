@@ -9,4 +9,5 @@ class  ServerIndex extends Component{
   }
 }
 
-export ServerIndex
+export default ServerIndex
+

@@ -1,7 +1,8 @@
 import Taro, { Component } from "@tarojs/taro";
 import api from "../../service/api";
 import './video.styl'
-class Video extends Component {
+
+class VideoPage extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
   };
@@ -54,4 +55,4 @@ class Video extends Component {
   }
 }
 
-export default Video;
+export default VideoPage;
