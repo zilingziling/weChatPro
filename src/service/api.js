@@ -7,12 +7,7 @@ let token = "";
 export default {
   baseOptions(params, method = "GET") {
     let { url, data } = params;
-    wx.getStorage({
-      key: "token",
-      success(res) {
-        token=res.data
-      }
-    });
+     token = wx.getStorageSync('token')
     console.log(token);
     let contentType = "application/x-www-form-urlencoded";
     contentType = params.contentType || contentType;
@@ -49,5 +44,9 @@ export default {
   post: function(url, data) {
     let params = { url, data };
     return this.baseOptions(params, "POST");
-  }
+  },
+  put: function(url, data) {
+    let params = { url, data };
+    return this.baseOptions(params, "PUT");
+  },
 };

@@ -1,9 +1,11 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
-import { AtButton  } from "taro-ui";
+import { AtButton ,AtMessage  } from "taro-ui";
 import { connect } from "@tarojs/redux";
 import classNames from "classnames";
 import "./form.styl";
+import './form.scss'
+import api from '../../service/api'
 class MyForm extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
@@ -73,24 +75,28 @@ class MyForm extends Component {
     this.setState({
       wantSelect: item.value,
       wantShow: false,
-      purchaseIntention:item.id
+      purchaseIntention:Number(item.id)
     });
   }
   onSelectMoney=(item)=>{
     this.setState({
       moneySelect: item.value,
       moneyShow: false,
-      purchaseBudget:item.id
+      purchaseBudget:Number(item.id)
     });
   }
    inputName=e=>{
      this.setState({
-       name:e.target.value
+       name:e.target.value,
+       moneyShow:false,
+       wantShow:false
      })
   }
   inputPhone=e=>{
     this.setState({
-      phone:e.target.value
+      phone:e.target.value,
+      moneyShow:false,
+      wantShow:false
     })
   }
   onCheck=()=>{
@@ -98,14 +104,53 @@ class MyForm extends Component {
       agree:!this.state.agree
     })
   }
-  toVideo=()=>{
-    Taro.navigateTo({
-      url: '/pages/video/video'
+  clear=()=>{
+    this.setState({
+      moneySelect: "",
+      wantSelect: "",
+      purchaseIntention: "",
+      purchaseBudget: "",
+      name:'',
+      phone:'',
+      agree:false,
+      moneyShow: false,
+      wantShow: false,
     })
+  }
+  toVideo=()=>{
+    const {agree,name,phone,purchaseBudget,purchaseIntention}=this.state
+    if(!name||!phone||typeof purchaseBudget!=="number"||typeof purchaseIntention!=="number"){
+      Taro.atMessage({
+        'message': '请先填写参数！',
+        'type': 'error',
+      })
+    }else if(agree.toString().toUpperCase()==="FALSE"){
+      Taro.atMessage({
+        'message': '请同意个人信息隐私政策！',
+        'type': 'error',
+      })
+    } else {
+      api.put('/customers', {name,phone,purchaseBudget,purchaseIntention,agree:agree.toString().toUpperCase()}).then(r=>{
+        if(r.statusCode===200&&r.data.result){
+          console.log(r)
+          Taro.navigateTo({
+            url: '/pages/video/video'
+          })
+          this.clear()
+        }else {
+          console.log(r)
+          Taro.atMessage({
+            'message': r.data.message,
+            'type': 'error',
+          })
+        }
+      })
+    }
   }
   render() {
     return (
       <View className="formWraper">
+        <AtMessage />
         <Text className="info">欢迎您的光临！</Text>
         <Text className="info">通过嘉寓天幕线上展厅留言</Text>
         <Text className="info">到店即可独享5000元购房抵用券</Text>
@@ -176,8 +221,8 @@ class MyForm extends Component {
           </label>
           </checkbox-group>
       </View>
-        <View className="toSec">
-          <Text className="click" onClick={this.toVideo}>点击进入接待</Text>
+        <View className="toSec" onClick={this.toVideo}>
+          <Text className="click" >点击进入接待</Text>
         </View>
         <Text className="time">服务时间：am9:00-pm18:00</Text>
       </View>
