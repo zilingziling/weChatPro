@@ -33,6 +33,9 @@ class App extends Component {
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
     },
+    networkTimeout:{
+      'request':100000
+    }
 
   }
 

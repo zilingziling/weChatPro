@@ -16,7 +16,6 @@ export default {
       url: base + url,
       data: data,
       method: method,
-      networkTimeout:params.timeout||6000000,
       header: token
         ? { "content-type": contentType, Authorization: `Bearer ${token}` }
         : { "content-type": contentType },

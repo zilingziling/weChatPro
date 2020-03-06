@@ -1,33 +1,60 @@
 import Taro, { Component } from "@tarojs/taro";
 import api from "../../service/api";
+import {AtMessage  } from "taro-ui";
+import './video.scss'
 import './video.styl'
+import {throttle} from '../../utils/func'
 import ServerVideo from '../../components/serverVideo/serverVideo'
 import ClientVideo from '../../components/clientVideo/clientVideo'
 class VideoPage extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
   };
+
   state = {
     videoCallId: "",
-    pullRtmpUrl:'rtmp://39.98.67.142/rtmpt',
-    pushRtmpUrl:''
+    pullRtmpUrl:'',
+    pushRtmpUrl:'',
+    fullScreenStyle:"width: 100vw; height: 100vh;over-flow:hidden",
+    littleScreen:"width: 30vw; height: 40vw;position:absolute;right:0;top:0;z-index:1000",
+    fullClicked:false
   };
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
   }
+    // access_token=${wx.getStorageSync('token')
   componentDidMount() {
+    wx.showLoading({
+      title: '连接中',
+    })
     api.post('/customers/videos').then(r=>{
       if(r.data.result){
-        this.setState({
-          videoCallId:r.data.data.videoCallId
+        wx.hideLoading({
+          success:()=>{
+            Taro.atMessage({
+              'message': '已接通',
+              'type': 'success',
+            })
+            this.setState({
+              videoCallId:r.data.data.videoCallId,
+              pullRtmpUrl:r.data.data.pullRtmpUrl,
+              pushRtmpUrl:r.data.data.pushRtmpUrl
+            })
+          }
         })
-        api.get(`/customers/videos/${r.data.data.videoCallId}`).then(r=>{
-          if(r.data.result){
-              this.setState({
-                pullRtmpUrl: `${r.data.data.pullRtmpUrl}?access_token=${wx.getStorageSync('token')}`,
-                pushRtmpUrl:`${r.data.data.pushRtmpUrl}?access_token=${wx.getStorageSync('token')}`,
-                videoCallId:r.data.data.videoCallId
+      }else {
+        wx.hideLoading({
+          success:()=>{
+            Taro.atMessage({
+              'message': r.data.message+'，请稍后再试！',
+              'type': 'error',
+              'duration':4000
+            })
+            setTimeout(()=>{
+              wx.navigateBack({
+                delta: 1
               })
+            },4000)
           }
         })
       }
@@ -41,34 +68,61 @@ class VideoPage extends Component {
 // {/*{*/}
 // {/*  wx.getStorageSync('server')==='TRUE'?<ServerVideo {...props}/>:<ClientVideo {...props}/>*/}
 // {/*}*/}
-  onClose=()=>{
+  onClose=throttle(()=>{
     let url=wx.getStorageSync('server')==='TRUE'?`/servers/videos/${this.state.videoCallId}`:`/customers/videos/${this.state.videoCallId}`
-    api.del(url).then(r=>{
+    api.del(`/customers/videos/${this.state.videoCallId}`).then(r=>{
       if(r.data.result){
-        Taro.navigateTo({
-          url: '/pages/dial/dial'
+        Taro.atMessage({
+          'message': '通话结束！',
+          'type': 'error',
+          'duration':3000
+        })
+       setTimeout(()=>{
+         wx.navigateBack({
+           delta: 1
+         })
+       },3000)
+        this.setState({
+          videoCallId: "",
+          pullRtmpUrl:'',
+          pushRtmpUrl:'',
+          fullClicked:false
         })
       }
     })
-  }
+  },3000)
+  switchFull=throttle(()=>{
+    this.setState({
+      fullClicked: !this.state.fullClicked
+    })
+  },2000)
   render() {
-    const props={
-      pullRtmpUrl:this.state.pullRtmpUrl,
-      pushRtmpUrl:this.state.pushRtmpUrl
-    }
+    const {pushRtmpUrl,pullRtmpUrl,fullScreenStyle,littleScreen,fullClicked}=this.state
+    console.log(pushRtmpUrl,pullRtmpUrl)
     return (
 
         <View className="videoWrapper">
-          <live-pusher  url={pushRtmpUrl} mode="RTC" autopush bindstatechange="statechange" style="width: 30vw; height: 40vw;position:absolute;right:0;top:0;z-index:1000" />
-          <live-player
-            src={pullRtmpUrl}
-            mode="RTC"
-            autoplay
-            bindstatechange="statechange"
-            binderror="error"
-            style="width: 100vw; height: 100vh;over-flow:hidden"
-          />
-          <Image onClick={this.onClose} className='answer' src='http://39.98.67.142/assets/answer.png'/>
+          <AtMessage />
+          <View style={fullClicked?fullScreenStyle:littleScreen} onClick={this.switchFull}>
+            <live-pusher
+              beauty={9}
+              url={pushRtmpUrl}
+              mode="RTC"
+              autopush={true}
+              style={fullClicked?fullScreenStyle:littleScreen}/>
+          </View>
+          <View onClick={this.switchFull} style={fullClicked?littleScreen:fullScreenStyle}>
+            <live-player
+              src={pullRtmpUrl}
+              mode="RTC"
+              autoplay
+              binderror="error"
+              style={fullClicked?littleScreen:fullScreenStyle}
+            />
+          </View>
+          {
+            this.state.videoCallId&&<Image onClick={this.onClose} className='answer' src='http://39.98.67.142/assets/answer.png'/>
+          }
         </View>
     );
   }

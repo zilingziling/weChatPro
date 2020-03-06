@@ -2,6 +2,7 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import './serverIndex.styl'
 import api from '../../service/api'
+import {throttle} from '../../utils/func'
 class  ServerIndex extends Component{
   state={
     callList:[]
@@ -23,15 +24,16 @@ class  ServerIndex extends Component{
       clearInterval(this.timer);
     }
   }
-  onResponse=item=>{
+  onResponse=throttle(item=>{
     api.get(`/servers/videos/${item.videoCallId}`).then(r=>{
       if(r.data.result){
-        console.log(r)
+        Taro.navigateTo({
+          url: '/pages/video/video'
+        })
       }
     })
-  }
+  },2000)
   render(){
-    console.log(this.state.callList)
     return (
       <View className='waiting'>
         <View className='list'>

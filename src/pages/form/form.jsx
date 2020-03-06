@@ -3,6 +3,7 @@ import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import { AtButton ,AtMessage  } from "taro-ui";
 import { connect } from "@tarojs/redux";
 import classNames from "classnames";
+import {throttle} from '../../utils/func'
 import "./form.styl";
 import './form.scss'
 import api from '../../service/api'
@@ -117,7 +118,7 @@ class MyForm extends Component {
       wantShow: false,
     })
   }
-  toVideo=()=>{
+  toVideo=throttle(()=>{
     const {agree,name,phone,purchaseBudget,purchaseIntention}=this.state
     if(!name||!phone||typeof purchaseBudget!=="number"||typeof purchaseIntention!=="number"){
       Taro.atMessage({
@@ -146,7 +147,7 @@ class MyForm extends Component {
         }
       })
     }
-  }
+  },3000)
   render() {
     return (
       <View className="formWraper">

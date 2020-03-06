@@ -1,31 +1,26 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
-
+import { throttle } from "../../utils/func";
 import "./index.styl";
-
 import api from "../../service/api";
 
 class ClientIndex extends Component {
-
-
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
   }
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   componentDidHide() {}
-  toDial() {
+  toDial = throttle(() => {
     Taro.navigateTo({
       url: "/pages/dial/dial"
     });
-  }
-  toMore() {
+  }, 3000);
+  toMore = throttle(() => {
     Taro.navigateTo({
       url: "/pages/more/more"
     });
-  }
+  }, 3000);
   previewImage = e => {
     wx.previewImage({
       current: "http://39.98.67.142/assets/qrcode.png",

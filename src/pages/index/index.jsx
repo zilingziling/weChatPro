@@ -24,6 +24,8 @@ class Index extends Component {
          api.get('/auth/token', {js_code:res.code}).then(res=>{
            if(res.data.result){
              wx.setStorageSync('token', res.data.data.accessToken)
+             wx.setStorageSync('openid', res.data.data.openid)
+             wx.setStorageSync('sessionKey', res.data.data.sessionKey)
              api.get('/auth/current').then(r=>{
                if(r.data.result){
                  wx.setStorageSync('customer', r.data.data.customer)
