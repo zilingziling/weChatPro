@@ -70,7 +70,7 @@ class VideoPage extends Component {
 // {/*}*/}
   onClose=throttle(()=>{
     let url=wx.getStorageSync('server')==='TRUE'?`/servers/videos/${this.state.videoCallId}`:`/customers/videos/${this.state.videoCallId}`
-    api.del(`/customers/videos/${this.state.videoCallId}`).then(r=>{
+    api.del(url).then(r=>{
       if(r.data.result){
         Taro.atMessage({
           'message': '通话结束！',
@@ -98,7 +98,6 @@ class VideoPage extends Component {
   },2000)
   render() {
     const {pushRtmpUrl,pullRtmpUrl,fullScreenStyle,littleScreen,fullClicked}=this.state
-    console.log(pushRtmpUrl,pullRtmpUrl)
     return (
 
         <View className="videoWrapper">
@@ -106,6 +105,7 @@ class VideoPage extends Component {
           <View style={fullClicked?fullScreenStyle:littleScreen} onClick={this.switchFull}>
             <live-pusher
               beauty={9}
+              // url='rtmp://39.98.67.142:1935/live/VIDEO_CALL_COSTOMER_98c0e5b8e80b470398a7102e19cabaa4/'
               url={pushRtmpUrl}
               mode="RTC"
               autopush={true}
@@ -114,6 +114,7 @@ class VideoPage extends Component {
           <View onClick={this.switchFull} style={fullClicked?littleScreen:fullScreenStyle}>
             <live-player
               src={pullRtmpUrl}
+              // src='rtmp://39.98.67.142:1935/live/VIDEO_CALL_COSTOMER_98c0e5b8e80b470398a7102e19cabaa4/'
               mode="RTC"
               autoplay
               binderror="error"

@@ -48,7 +48,8 @@ import {throttle} from '../../utils/func'
         <Text className="ask">您想咨询哪方面问题？</Text>
 
         <View className="ope">
-          <Image className="img" src='http://39.98.67.142/assets/video.jpg' onClick={this.toForm}/>
+            <Image className="img" src='http://39.98.67.142/assets/video.jpg' onClick={this.toForm}/>
+
           {/*<Image className="img" src='http://39.98.67.142/assets/phone.jpg'  />*/}
 
           <Button   openType="getPhoneNumber" onGetPhoneNumber={this.getPhoneNumber}>
