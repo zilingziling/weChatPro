@@ -4,9 +4,9 @@ import { AtButton ,AtMessage  } from "taro-ui";
 import { connect } from "@tarojs/redux";
 import classNames from "classnames";
 import {throttle} from '../../utils/func'
+import api from '../../service/api'
 import "./form.styl";
 import './form.scss'
-import api from '../../service/api'
 class MyForm extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
@@ -19,7 +19,25 @@ class MyForm extends Component {
   componentWillUnmount() {}
 
   componentDidShow() {}
-
+  componentDidMount(){
+    api.get('/customers/status').then(r=>{
+      if(r.data.result){
+        if(r.data.data.saved){
+          console.log(1)
+          Taro.atMessage({
+            'message': '你的信息已保存过！',
+            'type': 'error',
+            'duration':4000
+          })
+          setTimeout(()=>{
+            wx.navigateBack({
+              delta: 1
+            })
+          },4000)
+        }
+      }
+    })
+  }
   componentDidHide() {}
   state = {
     moneyShow: false,

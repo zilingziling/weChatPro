@@ -1,5 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
 import '../video.styl'
+import {baseUrl} from '../../service/config'
 class ClientVideo extends Component{
   render(){
   const {pullRtmpUrl,pushRtmpUrl}=this.props
@@ -15,7 +16,7 @@ class ClientVideo extends Component{
         binderror="error"
         style="width: 100vw; height: 40vh;over-flow:hidden"
       />
-      <Image className='answer' src='http://39.98.67.142/assets/answer.png'/>
+      <Image className='answer' src= {`${baseUrl}answer.png`}/>
     </View>
   )
 }

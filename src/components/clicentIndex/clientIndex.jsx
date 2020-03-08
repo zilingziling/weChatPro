@@ -3,7 +3,7 @@ import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import { throttle } from "../../utils/func";
 import "./index.styl";
 import api from "../../service/api";
-
+import {baseUrl} from '../../service/config'
 class ClientIndex extends Component {
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
@@ -23,8 +23,8 @@ class ClientIndex extends Component {
   }, 3000);
   previewImage = e => {
     wx.previewImage({
-      current: "http://39.98.67.142/assets/qrcode.png",
-      urls: ["http://39.98.67.142/assets/qrcode.png"]
+      current:baseUrl+"qrcode.png",
+      urls: [baseUrl+"qrcode.png"]
     });
   };
   imgView = item => {
@@ -98,7 +98,7 @@ class ClientIndex extends Component {
         </Swiper>
         <Image
           onClick={this.previewImage}
-          src="http://39.98.67.142/assets/qrcode.png"
+          src={`${baseUrl}qrcode.png`}
           className="qrcode"
         ></Image>
       </View>
@@ -111,69 +111,69 @@ const types1 = [
   {
     name: "二室二厅一卫",
     area: "建筑面积：约88㎡",
-    src: "http://39.98.67.142/assets/A88.jpg"
+    src: `${baseUrl}A88.jpg`
   },
   {
     name: "一室二厅一卫",
     area: "建筑面积：约69.5㎡",
-    src: "http://39.98.67.142/assets/A1.jpg"
+    src: `${baseUrl}A1.jpg`
   },
   {
     name: "一室二厅一卫",
     area: "建筑面积：约68㎡",
-    src: "http://39.98.67.142/assets/B.jpg"
+    src: `${baseUrl}B.jpg`
   }
 ];
 const types2 = [
   {
     name: "一室二厅一卫",
     area: "建筑面积：约53.49㎡",
-    src: "http://39.98.67.142/assets/B1.jpg"
+    src: `${baseUrl}B1.jpg`
   },
   {
     name: "一室一厅一卫",
     area: "建筑面积：约43㎡",
-    src: "http://39.98.67.142/assets/C.jpg"
+    src: `${baseUrl}C.jpg`
   },
   {
     name: "一室一厅一卫",
     area: "建筑面积：约47㎡",
-    src: "http://39.98.67.142/assets/C1.jpg"
+    src: `${baseUrl}C1.jpg`
   }
 ];
 const types3 = [
   {
     name: "一室一厅一卫",
     area: "建筑面积：约36㎡",
-    src: "http://39.98.67.142/assets/E.jpg"
+    src: `${baseUrl}E.jpg`
   },
   {
     name: "一室一厅一卫",
     area: "建筑面积：约28㎡",
-    src: "http://39.98.67.142/assets/E1.jpg"
+    src: `${baseUrl}E1.jpg`
   },
   {
     name: "一室一厅一卫",
     area: "建筑面积：约40㎡",
-    src: "http://39.98.67.142/assets/F.jpg"
+    src: `${baseUrl}F.jpg`
   }
 ];
 const types4 = [
   {
     name: "一室一厅一卫",
     area: "建筑面积：约31㎡",
-    src: "http://39.98.67.142/assets/F1.jpg"
+    src: `${baseUrl}F1.jpg`
   }
 ];
 const imgList = [
-  "http://39.98.67.142/assets/A88.jpg",
-  "http://39.98.67.142/assets/A1.jpg",
-  "http://39.98.67.142/assets/B.jpg",
-  "http://39.98.67.142/assets/B1.jpg",
-  "http://39.98.67.142/assets/C.jpg",
-  "http://39.98.67.142/assets/C1.jpg",
-  "http://39.98.67.142/assets/E.jpg",
-  "http://39.98.67.142/assets/E1.jpg",
-  "http://39.98.67.142/assets/F.jpg",
-  "http://39.98.67.142/assets/F1.jpg"
+  `${baseUrl}A88.jpg`,
+  `${baseUrl}A1.jpg`,
+  `${baseUrl}B.jpg`,
+  `${baseUrl}B1.jpg`,
+  `${baseUrl}C.jpg`,
+  `${baseUrl}C1.jpg`,
+  `${baseUrl}E.jpg`,
+  `${baseUrl}E1.jpg`,
+  `${baseUrl}F.jpg`,
+  `${baseUrl}F1.jpg`
 ];

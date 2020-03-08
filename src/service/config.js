@@ -1,3 +1,4 @@
 
 
-export const base = "http://39.98.67.142/api"
+export const base = "https://jiayutianmu.styleking.cn:30000/api"
+export const baseUrl="https://jiayutianmu.styleking.cn:30000/assets/"

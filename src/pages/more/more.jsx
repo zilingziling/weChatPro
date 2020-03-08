@@ -3,7 +3,7 @@ import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import './more.styl'
 import Contact from '../../components/contact/dialComponent'
-
+import {baseUrl} from '../../service/config'
 class More extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
@@ -22,7 +22,7 @@ class More extends Component {
   render() {
     return (
       <View className='moreWrapper'>
-        <Image className='long' src='http://39.98.67.142/assets/bg3.jpg'/>
+        <Image className='long' src={`${baseUrl}bg3.jpg`}/>
         <Contact/>
       </View>
     );

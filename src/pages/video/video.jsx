@@ -24,43 +24,176 @@ class VideoPage extends Component {
   }
     // access_token=${wx.getStorageSync('token')
   componentDidMount() {
+    console.log(this.$router.params.videoCallId)
+    let isServer=wx.getStorageSync('server')
+    let setTimer=(videoCallId)=>{
+      this.Timer = setInterval(() => {
+        api.del(isServer?`/servers/videos/${videoCallId}/heartbeat`:`/customers/videos/${videoCallId}/heartbeat`).then(resp=>{
+          if(resp.data.result){
+            if(resp.data.data.status==='DROPPED_CALL'){
+              Taro.atMessage({
+                'message': '对方已挂断！',
+                'type': 'error',
+                'duration':4000
+              })
+              clearInterval(this.Timer)
+              setTimeout(()=>{
+                wx.navigateBack({
+                  delta: 1
+                })
+              },4000)
+            }
+          }
+        })
+      }, 5000);
+    }
+
+
     wx.showLoading({
       title: '连接中',
     })
-    api.post('/customers/videos').then(r=>{
-      if(r.data.result){
-        wx.hideLoading({
-          success:()=>{
-            Taro.atMessage({
-              'message': '已接通',
-              'type': 'success',
-            })
-            this.setState({
-              videoCallId:r.data.data.videoCallId,
-              pullRtmpUrl:r.data.data.pullRtmpUrl,
-              pushRtmpUrl:r.data.data.pushRtmpUrl
+    // 客服
+    if(isServer==='TRUE'){
+      api.get(`/servers/videos/${this.$router.params.videoCallId}`).then(r => {
+        if (r.data.result) {
+          // 有遗留电话
+          if (r.data.data.leftOverCall === 'TRUE') {
+            // 挂断
+            api.del(`servers/videos/${r.data.data.videoCallId}`).then(res => {
+              if (res.data.result) {
+                api.get(`/servers/videos/${this.$router.params.videoCallId}`).then(response => {
+                  // 再次接通成功
+                  if (response.data.result) {
+                    wx.hideLoading({
+                      success: () => {
+                        Taro.atMessage({
+                          'message': '已接通',
+                          'type': 'success',
+                        })
+                        this.setState({
+                          videoCallId: response.data.data.videoCallId,
+                          pullRtmpUrl: response.data.data.pullRtmpUrl,
+                          pushRtmpUrl: response.data.data.pushRtmpUrl
+                        })
+                        setTimer(response.data.data.videoCallId)
+                      }
+                    })
+                  }
+                })
+              }
             })
           }
-        })
-      }else {
-        wx.hideLoading({
-          success:()=>{
-            Taro.atMessage({
-              'message': r.data.message+'，请稍后再试！',
-              'type': 'error',
-              'duration':4000
+          // 没有遗留电话直接接通
+          else {
+            wx.hideLoading({
+              success: () => {
+                Taro.atMessage({
+                  'message': '已接通',
+                  'type': 'success',
+                })
+                this.setState({
+                  videoCallId: r.data.data.videoCallId,
+                  pullRtmpUrl: r.data.data.pullRtmpUrl,
+                  pushRtmpUrl: r.data.data.pushRtmpUrl
+                })
+                setTimer(r.data.data.videoCallId)
+              }
             })
-            setTimeout(()=>{
-              wx.navigateBack({
-                delta: 1
+
+          }
+        }
+        else {
+          wx.hideLoading({
+            success:()=>{
+              Taro.atMessage({
+                'message': r.data.message+'，请稍后再试！',
+                'type': 'error',
+                'duration':4000
               })
-            },4000)
+              setTimeout(()=>{
+                wx.navigateBack({
+                  delta: 1
+                })
+              },4000)
+            }
+          })
+        }
+      })
+    }
+    // 客户
+    else {
+      api.post('/customers/videos').then(r => {
+        if (r.data.result) {
+          // 有遗留电话
+          if (r.data.data.leftOverCall === 'TRUE') {
+            // 挂断
+            api.del(`customers/videos/${r.data.data.videoCallId}`).then(res => {
+              if (res.data.result) {
+                api.post('/customers/videos').then(response => {
+                  // 再次接通成功
+                  if (response.data.result) {
+                    wx.hideLoading({
+                      success: () => {
+                        Taro.atMessage({
+                          'message': '已接通',
+                          'type': 'success',
+                        })
+                        this.setState({
+                          videoCallId: response.data.data.videoCallId,
+                          pullRtmpUrl: response.data.data.pullRtmpUrl,
+                          pushRtmpUrl: response.data.data.pushRtmpUrl
+                        })
+                        setTimer(response.data.data.videoCallId)
+                      }
+                    })
+                  }
+                })
+              }
+            })
           }
-        })
-      }
-    })
+          // 没有遗留电话直接接通
+          else {
+            wx.hideLoading({
+              success: () => {
+                Taro.atMessage({
+                  'message': '已接通',
+                  'type': 'success',
+                })
+                this.setState({
+                  videoCallId: r.data.data.videoCallId,
+                  pullRtmpUrl: r.data.data.pullRtmpUrl,
+                  pushRtmpUrl: r.data.data.pushRtmpUrl
+                })
+                setTimer(r.data.data.videoCallId)
+              }
+            })
+
+          }
+        }
+        else {
+          wx.hideLoading({
+            success:()=>{
+              Taro.atMessage({
+                'message': r.data.message+'，请稍后再试！',
+                'type': 'error',
+                'duration':4000
+              })
+              setTimeout(()=>{
+                wx.navigateBack({
+                  delta: 1
+                })
+              },4000)
+            }
+          })
+        }
+      })
+    }
   }
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    if (this.Timer != null) {
+      clearInterval(this.Timer);
+    }
+  }
 
   componentDidShow() {}
 
@@ -77,6 +210,7 @@ class VideoPage extends Component {
           'type': 'error',
           'duration':3000
         })
+        clearInterval(this.Timer)
        setTimeout(()=>{
          wx.navigateBack({
            delta: 1
@@ -99,7 +233,6 @@ class VideoPage extends Component {
   render() {
     const {pushRtmpUrl,pullRtmpUrl,fullScreenStyle,littleScreen,fullClicked}=this.state
     return (
-
         <View className="videoWrapper">
           <AtMessage />
           <View style={fullClicked?fullScreenStyle:littleScreen} onClick={this.switchFull}>
@@ -130,3 +263,4 @@ class VideoPage extends Component {
 }
 
 export default VideoPage;
+

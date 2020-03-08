@@ -3,6 +3,7 @@ import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import './serverIndex.styl'
 import api from '../../service/api'
 import {throttle} from '../../utils/func'
+import {baseUrl}  from '../../service/config'
 class  ServerIndex extends Component{
   state={
     callList:[]
@@ -12,7 +13,7 @@ class  ServerIndex extends Component{
       api.get('/servers/videos').then(r=>{
           if(r.data.result){
             this.setState({
-              callList: this.state.callList.concat(r.data.data)
+              callList: r.data.data
             })
           }
       })
@@ -25,13 +26,10 @@ class  ServerIndex extends Component{
     }
   }
   onResponse=throttle(item=>{
-    api.get(`/servers/videos/${item.videoCallId}`).then(r=>{
-      if(r.data.result){
+    console.log(item)
         Taro.navigateTo({
-          url: '/pages/video/video'
+          url: `/pages/video/video?videoCallId=${item.videoCallId}`
         })
-      }
-    })
   },2000)
   render(){
     return (
@@ -41,7 +39,7 @@ class  ServerIndex extends Component{
           this.state.callList&&this.state.callList.map(item=><View className='user' key={item.userId}>
               <Text>张三</Text>
               <Text>18679899876</Text>
-              <Image className='hangup' src='http://39.98.67.142/assets/hangup.png' onClick={()=>this.onResponse(item)}/>
+              <Image className='hangup' src={`${baseUrl}hangup.png`} onClick={()=>this.onResponse(item)}/>
           </View>)
         }
         </View>

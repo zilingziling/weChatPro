@@ -3,6 +3,7 @@ import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import "./dial.styl";
 import api from '../../service/api'
 import {throttle} from '../../utils/func'
+import {baseUrl} from '../../service/config'
  class Contact extends Component {
   toForm=throttle(()=>{
     api.get('/customers/status').then(r=>{
@@ -48,7 +49,7 @@ import {throttle} from '../../utils/func'
         <Text className="ask">您想咨询哪方面问题？</Text>
 
         <View className="ope">
-            <Image className="img" src='http://39.98.67.142/assets/video.jpg' onClick={this.toForm}/>
+            <Image className="img" src={`${baseUrl}video.jpg`} onClick={this.toForm}/>
 
           {/*<Image className="img" src='http://39.98.67.142/assets/phone.jpg'  />*/}
 

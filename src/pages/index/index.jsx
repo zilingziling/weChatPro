@@ -10,18 +10,20 @@ class Index extends Component {
     navigationBarTitleText: "嘉寓天幕线上展厅"
   };
   state={
-
+    isServer:''
   }
 
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
   }
   componentDidMount(){
+    const that=this
+
     wx.login({
       success (res) {
         if (res.code) {
           // 发起网络请求
-         api.get('/auth/token', {js_code:res.code}).then(res=>{
+          api.get('/auth/token', {js_code:res.code}).then(res=>{
            if(res.data.result){
              wx.setStorageSync('token', res.data.data.accessToken)
              wx.setStorageSync('openid', res.data.data.openid)
@@ -30,6 +32,9 @@ class Index extends Component {
                if(r.data.result){
                  wx.setStorageSync('customer', r.data.data.customer)
                  wx.setStorageSync('server', r.data.data.server)
+                 that.setState({
+                   isServer:r.data.data.server
+                 })
                }
              })
            }
@@ -46,11 +51,11 @@ class Index extends Component {
 
 
   render() {
-    console.log(wx.getStorageSync('server'))
+    console.log(this.state.isServer)
     return (
     <View>
-      <ClientIndex />
-      {/*{wx.getStorageSync('server')==='TRUE' ? <ServerIndex /> : <ClientIndex />}*/}
+      {/*<ClientIndex />*/}
+      {this.state.isServer==='TRUE' ? <ServerIndex /> :this.state.isServer==='FALSE' ? <ClientIndex />:null}
     </View>
     )
   }
