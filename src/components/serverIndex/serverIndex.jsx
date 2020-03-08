@@ -25,12 +25,11 @@ class  ServerIndex extends Component{
       clearInterval(this.timer);
     }
   }
-  onResponse=throttle(item=>{
-    console.log(item)
+  onResponse=item=>{
         Taro.navigateTo({
           url: `/pages/video/video?videoCallId=${item.videoCallId}`
         })
-  },2000)
+  }
   render(){
     return (
       <View className='waiting'>

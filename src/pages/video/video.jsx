@@ -24,7 +24,6 @@ class VideoPage extends Component {
   }
     // access_token=${wx.getStorageSync('token')
   componentDidMount() {
-    console.log(this.$router.params.videoCallId)
     let isServer=wx.getStorageSync('server')
     let setTimer=(videoCallId)=>{
       this.Timer = setInterval(() => {

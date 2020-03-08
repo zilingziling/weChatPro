@@ -20,11 +20,8 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-
-      'pages/form/form',
-
-
       'pages/video/video',
+      'pages/form/form',
       'pages/dial/dial',
       'pages/more/more',
     ],
