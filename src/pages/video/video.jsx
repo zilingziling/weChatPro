@@ -26,9 +26,10 @@ class VideoPage extends Component {
     // access_token=${wx.getStorageSync('token')
   componentDidMount() {
     let isServer=wx.getStorageSync('server')
+    console.log(isServer)
     let setTimer=(videoCallId)=>{
       this.Timer = setInterval(() => {
-        api.del(isServer?`/servers/videos/${videoCallId}/heartbeat`:`/customers/videos/${videoCallId}/heartbeat`).then(resp=>{
+        api.del(isServer==='TRUE'?`/servers/videos/${videoCallId}/heartbeat`:`/customers/videos/${videoCallId}/heartbeat`).then(resp=>{
           if(resp.data.result){
             if(resp.data.data.status==='DROPPED_CALL'){
               Taro.atMessage({
