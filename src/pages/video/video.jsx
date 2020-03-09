@@ -6,6 +6,7 @@ import './video.styl'
 import {throttle} from '../../utils/func'
 import ServerVideo from '../../components/serverVideo/serverVideo'
 import ClientVideo from '../../components/clientVideo/clientVideo'
+import {baseUrl} from '../../service/config'
 class VideoPage extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
@@ -253,9 +254,7 @@ class VideoPage extends Component {
               style={fullClicked?littleScreen:fullScreenStyle}
             />
           </View>
-          {
-            this.state.videoCallId&&<Image onClick={this.onClose} className='answer' src='http://39.98.67.142/assets/answer.png'/>
-          }
+            <Image onClick={this.onClose} className='answer' src={`${baseUrl}answer.png`}/>
         </View>
     );
   }

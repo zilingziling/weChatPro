@@ -2,7 +2,8 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import ClientIndex from '../../components/clicentIndex/clientIndex'
 import  ServerIndex from '../../components/serverIndex/serverIndex'
-
+import {AtMessage  } from "taro-ui";
+import './index.scss'
 import api from '../../service/api'
 
 class Index extends Component {
@@ -35,6 +36,12 @@ class Index extends Component {
                  that.setState({
                    isServer:r.data.data.server
                  })
+               }else {
+                 Taro.atMessage({
+                   'message': '网络错误，请退出后重试！',
+                   'type': 'error',
+                   'duration':3000
+                 })
                }
              })
            }
@@ -55,6 +62,7 @@ class Index extends Component {
     return (
     <View>
       {/*<ClientIndex />*/}
+      <AtMessage />
       {this.state.isServer==='TRUE' ? <ServerIndex /> :this.state.isServer==='FALSE' ? <ClientIndex />:null}
     </View>
     )
