@@ -61,9 +61,10 @@ class Index extends Component {
     console.log(this.state.isServer)
     return (
     <View>
-      {/*<ClientIndex />*/}
       <AtMessage />
-      {this.state.isServer==='TRUE' ? <ServerIndex /> :this.state.isServer==='FALSE' ? <ClientIndex />:null}
+      <ServerIndex />
+
+      {/*{this.state.isServer==='TRUE' ? <ServerIndex /> :this.state.isServer==='FALSE' ? <ClientIndex />:null}*/}
     </View>
     )
   }

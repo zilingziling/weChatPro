@@ -4,18 +4,28 @@ import './serverIndex.styl'
 import api from '../../service/api'
 import {throttle} from '../../utils/func'
 import {baseUrl}  from '../../service/config'
-class  ServerIndex extends Component{
-  state={
-    callList:[]
+const innerAudioContext = Taro.createInnerAudioContext()
+class  ServerIndex extends Component {
+  state = {
+    callList: []
   }
-  componentDidMount(){
+
+  componentDidMount() {
+    // 音频
+    console.log(innerAudioContext)
+    innerAudioContext.src = `${baseUrl}incoming.wav`
+    innerAudioContext.loop = true
+    InnerAudioContext.play()
     this.timer = setInterval(() => {
-      api.get('/servers/videos').then(r=>{
-          if(r.data.result){
-            this.setState({
-              callList: r.data.data
-            })
+      api.get('/servers/videos').then(r => {
+        if (r.data.result) {
+          this.setState({
+            callList: r.data.data
+          })
+          if (r.data.data.length > 0) {
+            InnerAudioContext.play()
           }
+        }
       })
     }, 5000);
   }
@@ -25,11 +35,14 @@ class  ServerIndex extends Component{
       clearInterval(this.timer);
     }
   }
-  onResponse=item=>{
-        Taro.navigateTo({
-          url: `/pages/video/video?videoCallId=${item.videoCallId}`
-        })
+
+  onResponse = item => {
+    InnerAudioContext.stop()
+    Taro.navigateTo({
+      url: `/pages/video/video?videoCallId=${item.videoCallId}`
+    })
   }
+
   render(){
     return (
       <View className='waiting'>
