@@ -1,6 +1,7 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
 import { throttle } from "../../utils/func";
+import classNames from 'classnames'
 import "./index.styl";
 import api from "../../service/api";
 import {baseUrl} from '../../service/config'
@@ -40,7 +41,7 @@ class ClientIndex extends Component {
         <View className="toSec" onClick={this.toDial}>
           <Text className="click">点击进入接待</Text>
         </View>
-        <View className="toMore" onClick={this.toMore}>
+        <View className={classNames("toMore","heartBeat")} onClick={this.toMore}>
           <Text className="more">项目精述 · 查看更多</Text>
         </View>
         <Swiper

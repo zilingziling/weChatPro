@@ -26,7 +26,6 @@ class VideoPage extends Component {
     // access_token=${wx.getStorageSync('token')
   componentDidMount() {
     let isServer=wx.getStorageSync('server')
-    console.log(isServer)
     let setTimer=(videoCallId)=>{
       this.Timer = setInterval(() => {
         api.del(isServer==='TRUE'?`/servers/videos/${videoCallId}/heartbeat`:`/customers/videos/${videoCallId}/heartbeat`).then(resp=>{
@@ -38,6 +37,12 @@ class VideoPage extends Component {
                 'duration':4000
               })
               clearInterval(this.Timer)
+              this.setState({
+                videoCallId: "",
+                pullRtmpUrl:'',
+                pushRtmpUrl:'',
+                fullClicked:false
+              })
               setTimeout(()=>{
                 wx.navigateBack({
                   delta: 1
@@ -116,6 +121,12 @@ class VideoPage extends Component {
                   delta: 1
                 })
               },4000)
+              this.setState({
+                videoCallId: "",
+                pullRtmpUrl:'',
+                pushRtmpUrl:'',
+                fullClicked:false
+              })
             }
           })
         }
@@ -184,6 +195,12 @@ class VideoPage extends Component {
                   delta: 1
                 })
               },4000)
+              this.setState({
+                videoCallId: "",
+                pullRtmpUrl:'',
+                pushRtmpUrl:'',
+                fullClicked:false
+              })
             }
           })
         }

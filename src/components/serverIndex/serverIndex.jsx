@@ -36,8 +36,10 @@ class  ServerIndex extends Component{
         <View className='list'>
         {
           this.state.callList&&this.state.callList.map(item=><View className='user' key={item.userId}>
-              <Text>张三</Text>
-              <Text>18679899876</Text>
+              <Text>{item.name}</Text>
+              <Text>{item.phone}</Text>
+              <Text>{item.purchaseBudget}</Text>
+              <Text>{item.purchaseIntention}</Text>
               <Image className='hangup' src={`${baseUrl}hangup.png`} onClick={()=>this.onResponse(item)}/>
           </View>)
         }
