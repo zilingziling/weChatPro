@@ -62,9 +62,9 @@ class Index extends Component {
     return (
     <View>
       <AtMessage />
-      <ServerIndex />
+      {/*<ServerIndex />*/}
 
-      {/*{this.state.isServer==='TRUE' ? <ServerIndex /> :this.state.isServer==='FALSE' ? <ClientIndex />:null}*/}
+      {this.state.isServer==='TRUE' ? <ServerIndex /> :this.state.isServer==='FALSE' ? <ClientIndex />:null}
     </View>
     )
   }

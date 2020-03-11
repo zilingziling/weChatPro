@@ -1,21 +1,19 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
+import { View, Button, Text, Swiper, SwiperItem,Audio } from "@tarojs/components";
 import './serverIndex.styl'
 import api from '../../service/api'
 import {throttle} from '../../utils/func'
 import {baseUrl}  from '../../service/config'
-const innerAudioContext = Taro.createInnerAudioContext()
+let myAudio=wx.createInnerAudioContext()
+
 class  ServerIndex extends Component {
   state = {
-    callList: []
+    callList: [],
   }
-
   componentDidMount() {
     // 音频
-    console.log(innerAudioContext)
-    innerAudioContext.src = `${baseUrl}incoming.wav`
-    innerAudioContext.loop = true
-    InnerAudioContext.play()
+    myAudio.src = `${baseUrl}incoming.wav`
+    myAudio.loop = true
     this.timer = setInterval(() => {
       api.get('/servers/videos').then(r => {
         if (r.data.result) {
@@ -23,7 +21,7 @@ class  ServerIndex extends Component {
             callList: r.data.data
           })
           if (r.data.data.length > 0) {
-            InnerAudioContext.play()
+            myAudio.play()
           }
         }
       })
@@ -37,7 +35,7 @@ class  ServerIndex extends Component {
   }
 
   onResponse = item => {
-    InnerAudioContext.stop()
+    myAudio.stop()
     Taro.navigateTo({
       url: `/pages/video/video?videoCallId=${item.videoCallId}`
     })
