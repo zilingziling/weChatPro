@@ -20,6 +20,27 @@ export default {
         ? { "content-type": contentType, Authorization: `Bearer ${token}` }
         : { "content-type": contentType },
       success(res) {
+        if(res.statusCode ===401) {
+          wx.login({
+            success(resp) {
+              if (resp.code) {
+                // 发起网络请求
+                Taro.request({
+                  url: base + '/auth/token',
+                  data: {js_code: resp.code},
+                  method: 'GET',
+                  success(response) {
+                    if (res.data.result) {
+                      wx.setStorageSync('token', res.data.data.accessToken)
+                      wx.setStorageSync('openid', res.data.data.openid)
+                      wx.setStorageSync('sessionKey', res.data.data.sessionKey)
+                    }
+                  }
+                })
+              }
+            }
+          })
+        }
         if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
           return logError("api", "请求资源不存在");
         } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
@@ -30,9 +51,9 @@ export default {
           return res.data;
         }
       },
-      error(e) {
-        logError("api", "请求接口出现问题", e);
-      }
+        error(e) {
+          logError("api", "请求接口出现问题", e);
+        }
     };
     return Taro.request(option);
   },

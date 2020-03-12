@@ -7,6 +7,7 @@ import {throttle} from '../../utils/func'
 import ServerVideo from '../../components/serverVideo/serverVideo'
 import ClientVideo from '../../components/clientVideo/clientVideo'
 import {baseUrl} from '../../service/config'
+
 class VideoPage extends Component {
   config = {
     navigationBarTitleText: "嘉寓天幕线上展厅"
@@ -28,7 +29,7 @@ class VideoPage extends Component {
     let isServer=wx.getStorageSync('server')
     let setTimer=(videoCallId)=>{
       this.Timer = setInterval(() => {
-        api.del(isServer==='TRUE'?`/servers/videos/${videoCallId}/heartbeat`:`/customers/videos/${videoCallId}/heartbeat`).then(resp=>{
+        api.put(isServer==='TRUE'?`/servers/videos/${videoCallId}/heartbeat`:`/customers/videos/${videoCallId}/heartbeat`).then(resp=>{
           if(resp.data.result){
             if(resp.data.data.status==='DROPPED_CALL'){
               Taro.atMessage({
@@ -48,13 +49,12 @@ class VideoPage extends Component {
                   delta: 1
                 })
               },4000)
+              wx.setStorageSync('calling', '1');
             }
           }
         })
       }, 5000);
     }
-
-
     wx.showLoading({
       title: '连接中',
     })
@@ -70,6 +70,7 @@ class VideoPage extends Component {
                 api.get(`/servers/videos/${this.$router.params.videoCallId}`).then(response => {
                   // 再次接通成功
                   if (response.data.result) {
+                    console.log(response.data.data)
                     wx.hideLoading({
                       success: () => {
                         Taro.atMessage({
@@ -97,6 +98,7 @@ class VideoPage extends Component {
                   'message': '已接通',
                   'type': 'success',
                 })
+                console.log(r.data.data)
                 this.setState({
                   videoCallId: r.data.data.videoCallId,
                   pullRtmpUrl: r.data.data.pullRtmpUrl,
@@ -121,6 +123,7 @@ class VideoPage extends Component {
                   delta: 1
                 })
               },4000)
+              wx.setStorageSync('calling', '1');
               this.setState({
                 videoCallId: "",
                 pullRtmpUrl:'',
@@ -134,77 +137,7 @@ class VideoPage extends Component {
     }
     // 客户
     else {
-      api.post('/customers/videos').then(r => {
-        if (r.data.result) {
-          // 有遗留电话
-          if (r.data.data.leftOverCall === 'TRUE') {
-            // 挂断
-            api.del(`customers/videos/${r.data.data.videoCallId}`).then(res => {
-              if (res.data.result) {
-                api.post('/customers/videos').then(response => {
-                  // 再次接通成功
-                  if (response.data.result) {
-                    wx.hideLoading({
-                      success: () => {
-                        Taro.atMessage({
-                          'message': '已接通',
-                          'type': 'success',
-                        })
-                        this.setState({
-                          videoCallId: response.data.data.videoCallId,
-                          pullRtmpUrl: response.data.data.pullRtmpUrl,
-                          pushRtmpUrl: response.data.data.pushRtmpUrl
-                        })
-                        setTimer(response.data.data.videoCallId)
-                      }
-                    })
-                  }
-                })
-              }
-            })
-          }
-          // 没有遗留电话直接接通
-          else {
-            wx.hideLoading({
-              success: () => {
-                Taro.atMessage({
-                  'message': '已接通',
-                  'type': 'success',
-                })
-                this.setState({
-                  videoCallId: r.data.data.videoCallId,
-                  pullRtmpUrl: r.data.data.pullRtmpUrl,
-                  pushRtmpUrl: r.data.data.pushRtmpUrl
-                })
-                setTimer(r.data.data.videoCallId)
-              }
-            })
-
-          }
-        }
-        else {
-          wx.hideLoading({
-            success:()=>{
-              Taro.atMessage({
-                'message': r.data.message+'，请稍后再试！',
-                'type': 'error',
-                'duration':4000
-              })
-              setTimeout(()=>{
-                wx.navigateBack({
-                  delta: 1
-                })
-              },4000)
-              this.setState({
-                videoCallId: "",
-                pullRtmpUrl:'',
-                pushRtmpUrl:'',
-                fullClicked:false
-              })
-            }
-          })
-        }
-      })
+     this.sendCall(setTimer)
     }
   }
   componentWillUnmount() {
@@ -212,14 +145,104 @@ class VideoPage extends Component {
       clearInterval(this.Timer);
     }
   }
-
-  componentDidShow() {}
-
-  componentDidHide() {}
+//   发起通话
+  sendCall=(setTimer)=>{
+    api.post('/customers/videos').then(r=>{
+      if(r.data.result){
+        // 有遗留
+        if(r.data.data.leftOverCall==="TRUE"){
+          api.del(`customers/videos/${r.data.data.videoCallId}`).then(res=>{
+            // 挂断成功后再发起
+            if(res.data.result){
+              this.sendCall()
+            }
+          })
+        }
+        // 没有遗留电话
+        else {
+          // 存videoId
+          this.setState({
+            videoCallId:r.data.data.videoCallId
+          })
+          // 监听通话
+          api.get(`/customers/videos/${r.data.data.videoCallId}`).then(response=>{
+            if(response.data.result){
+              wx.hideLoading({
+                success: () => {
+                  Taro.atMessage({
+                    'message': '已接通',
+                    'type': 'success',
+                  })
+                  this.setState({
+                    videoCallId: response.data.data.videoCallId,
+                    pullRtmpUrl: response.data.data.pullRtmpUrl,
+                    pushRtmpUrl: response.data.data.pushRtmpUrl
+                  })
+                  // 通话中的心跳检测
+                  setTimer(response.data.data.videoCallId)
+                }
+              })
+            }
+            // 没接通
+            else {
+              wx.hideLoading({
+                success:()=>{
+                  Taro.atMessage({
+                    'message': response.data.message+'，请稍后再试！',
+                    'type': 'error',
+                    'duration':4000
+                  })
+                  setTimeout(()=>{
+                    wx.navigateBack({
+                      delta: 1
+                    })
+                  },4000)
+                  wx.setStorageSync('calling', '1');
+                  this.setState({
+                    videoCallId: "",
+                    pullRtmpUrl:'',
+                    pushRtmpUrl:'',
+                    fullClicked:false
+                  })
+                }
+              })
+            }
+          })
+        }
+      }
+      // 通话发起接口报错
+      else {
+        wx.hideLoading({
+          success:()=>{
+            Taro.atMessage({
+              'message': r.data.message+'，请稍后再试！',
+              'type': 'error',
+              'duration':4000
+            })
+            setTimeout(()=>{
+              wx.navigateBack({
+                delta: 1
+              })
+            },4000)
+            wx.setStorageSync('calling', '1');
+            this.setState({
+              videoCallId: "",
+              pullRtmpUrl:'',
+              pushRtmpUrl:'',
+              fullClicked:false
+            })
+          }
+        })
+      }
+    })
+  }
 // {/*{*/}
 // {/*  wx.getStorageSync('server')==='TRUE'?<ServerVideo {...props}/>:<ClientVideo {...props}/>*/}
 // {/*}*/}
   onClose=throttle(()=>{
+    if(!this.state.videoCallId){
+      return
+    }
     let url=wx.getStorageSync('server')==='TRUE'?`/servers/videos/${this.state.videoCallId}`:`/customers/videos/${this.state.videoCallId}`
     api.del(url).then(r=>{
       if(r.data.result){
@@ -229,11 +252,13 @@ class VideoPage extends Component {
           'duration':3000
         })
         clearInterval(this.Timer)
+        wx.setStorageSync('calling', '1');
        setTimeout(()=>{
          wx.navigateBack({
            delta: 1
          })
        },3000)
+        wx.setStorageSync('calling', '1');
         this.setState({
           videoCallId: "",
           pullRtmpUrl:'',

@@ -5,21 +5,21 @@ import api from '../../service/api'
 import {throttle} from '../../utils/func'
 import {baseUrl} from '../../service/config'
  class Contact extends Component {
-  toForm=throttle(()=>{
-    api.get('/customers/status').then(r=>{
-      if(r.data.result){
-        if(r.data.data.saved){
+  toForm=()=> {
+    api.get('/customers/status').then(r => {
+      if (r.data.result) {
+        if (r.data.data.saved) {
           Taro.navigateTo({
             url: '/pages/video/video'
           })
-        }else {
+        } else {
           Taro.navigateTo({
             url: '/pages/form/form'
           })
         }
       }
     })
-  },3000)
+  }
    getPhoneNumber=(e)=>{
     console.log(e.detail)
      if (e.detail.errMsg == "getPhoneNumber:ok") {

@@ -3,14 +3,17 @@ import { View, Button, Text, Swiper, SwiperItem,Audio } from "@tarojs/components
 import './serverIndex.styl'
 import api from '../../service/api'
 import {throttle} from '../../utils/func'
-import {baseUrl}  from '../../service/config'
-let myAudio=wx.createInnerAudioContext()
+import {baseUrl,myAudio}  from '../../service/config'
 
 class  ServerIndex extends Component {
   state = {
     callList: [],
+  //   1 没在通话中 2 在通话中
   }
   componentDidMount() {
+    wx.setStorageSync('calling', '1');
+   let calling= wx.getStorageSync('calling');
+   console.log(calling)
     // 音频
     myAudio.src = `${baseUrl}incoming.wav`
     myAudio.loop = true
@@ -20,7 +23,7 @@ class  ServerIndex extends Component {
           this.setState({
             callList: r.data.data
           })
-          if (r.data.data.length > 0) {
+          if (r.data.data.length > 0&&calling==='1') {
             myAudio.play()
           }
         }
@@ -36,6 +39,7 @@ class  ServerIndex extends Component {
 
   onResponse = item => {
     myAudio.stop()
+    wx.setStorageSync('calling', '2');
     Taro.navigateTo({
       url: `/pages/video/video?videoCallId=${item.videoCallId}`
     })
