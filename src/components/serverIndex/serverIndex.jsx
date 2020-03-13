@@ -40,6 +40,7 @@ class  ServerIndex extends Component {
   onResponse = item => {
     myAudio.stop()
     wx.setStorageSync('calling', '2');
+    wx.setStorageSync('videoCallId', item.videoCallId);
     Taro.navigateTo({
       url: `/pages/video/video?videoCallId=${item.videoCallId}`
     })
