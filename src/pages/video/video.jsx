@@ -74,20 +74,17 @@ class VideoPage extends Component {
                     // 再次接通成功
                     if (response.data.result) {
                       console.log(response.data.data);
-                      wx.hideLoading({
-                        success: () => {
-                          Taro.atMessage({
-                            message: "已接通",
-                            type: "success"
-                          });
-                          this.setState({
-                            videoCallId: response.data.data.videoCallId,
-                            pushRtmpUrl: response.data.data.pushRtmpUrl,
-                            pullRtmpUrl: response.data.data.pullRtmpUrl
-                          });
-                          setTimer(response.data.data.videoCallId);
-                        }
+                      wx.hideLoading();
+                      Taro.atMessage({
+                        message: "已接通",
+                        type: "success"
                       });
+                      this.setState({
+                        videoCallId: response.data.data.videoCallId,
+                        pushRtmpUrl: response.data.data.pushRtmpUrl,
+                        pullRtmpUrl: response.data.data.pullRtmpUrl
+                      });
+                      setTimer(response.data.data.videoCallId);
                     }
                   });
               }
@@ -95,38 +92,33 @@ class VideoPage extends Component {
           }
           // 没有遗留电话直接接通
           else {
-            wx.hideLoading({
-              success: () => {
-                Taro.atMessage({
-                  message: "已接通",
-                  type: "success"
-                });
-                console.log(r.data.data);
-                this.setState({
-                  videoCallId: r.data.data.videoCallId,
-                  pushRtmpUrl: r.data.data.pushRtmpUrl,
-                  pullRtmpUrl: r.data.data.pullRtmpUrl
-                });
-                setTimer(r.data.data.videoCallId);
-              }
+            console.log(r.data.data)
+            wx.hideLoading()
+            Taro.atMessage({
+              message: "已接通",
+              type: "success"
             });
+            this.setState({
+              videoCallId: r.data.data.videoCallId,
+              pushRtmpUrl: r.data.data.pushRtmpUrl,
+              pullRtmpUrl: r.data.data.pullRtmpUrl
+            });
+            setTimer(r.data.data.videoCallId);
+
           }
         } else {
-          wx.hideLoading({
-            success: () => {
-              Taro.atMessage({
-                message: r.data.message + "，请稍后再试！",
-                type: "error",
-                duration: 4000
-              });
-              setTimeout(() => {
-                wx.navigateBack({
-                  delta: 1
-                });
-              }, 4000);
-              wx.setStorageSync("calling", "1");
-            }
+          wx.hideLoading();
+          Taro.atMessage({
+            message: r.data.message + "，请稍后再试！",
+            type: "error",
+            duration: 4000
           });
+          setTimeout(() => {
+            wx.navigateBack({
+              delta: 1
+            });
+          }, 4000);
+          wx.setStorageSync("calling", "1");
         }
       });
     }
@@ -164,60 +156,51 @@ class VideoPage extends Component {
             .get(`/customers/videos/${r.data.data.videoCallId}`)
             .then(response => {
               if (response.data.result) {
-                wx.hideLoading({
-                  success: () => {
-                    Taro.atMessage({
-                      message: "已接通",
-                      type: "success"
-                    });
-                    this.setState({
-                      videoCallId: response.data.data.videoCallId,
-                      pullRtmpUrl: response.data.data.pullRtmpUrl,
-                      pushRtmpUrl: response.data.data.pushRtmpUrl
-                    });
-                    // 通话中的心跳检测
-                    setTimer(response.data.data.videoCallId);
-                  }
+                wx.hideLoading();
+                Taro.atMessage({
+                  message: "已接通",
+                  type: "success"
                 });
+                this.setState({
+                  videoCallId: response.data.data.videoCallId,
+                  pullRtmpUrl: response.data.data.pullRtmpUrl,
+                  pushRtmpUrl: response.data.data.pushRtmpUrl
+                });
+                // 通话中的心跳检测
+                setTimer(response.data.data.videoCallId);
               }
               // 没接通
               else {
-                wx.hideLoading({
-                  success: () => {
-                    Taro.atMessage({
-                      message: response.data.message + "，请稍后再试！",
-                      type: "error",
-                      duration: 4000
-                    });
-                    setTimeout(() => {
-                      wx.navigateBack({
-                        delta: 1
-                      });
-                    }, 4000);
-                    wx.setStorageSync("calling", "1");
-                  }
+                wx.hideLoading();
+                Taro.atMessage({
+                  message: response.data.message + "，请稍后再试！",
+                  type: "error",
+                  duration: 4000
                 });
+                setTimeout(() => {
+                  wx.navigateBack({
+                    delta: 1
+                  });
+                }, 4000);
+                wx.setStorageSync("calling", "1");
               }
             });
         }
       }
       // 通话发起接口报错
       else {
-        wx.hideLoading({
-          success: () => {
-            Taro.atMessage({
-              message: r.data.message + "，请稍后再试！",
-              type: "error",
-              duration: 4000
-            });
-            setTimeout(() => {
-              wx.navigateBack({
-                delta: 1
-              });
-            }, 4000);
-            wx.setStorageSync("calling", "1");
-          }
+        wx.hideLoading();
+        Taro.atMessage({
+          message: r.data.message + "，请稍后再试！",
+          type: "error",
+          duration: 4000
         });
+        setTimeout(() => {
+          wx.navigateBack({
+            delta: 1
+          });
+        }, 4000);
+        wx.setStorageSync("calling", "1");
       }
     });
   };
@@ -277,27 +260,31 @@ class VideoPage extends Component {
           style={fullClicked ? fullScreenStyle : littleScreen}
           onClick={this.switchFull}
         >
-          <live-pusher
-            beauty={9}
-            // url='rtmp://39.98.67.142:1935/live/VIDEO_CALL_SERVER_6fd79c5887aa4ee28b1aa8729b5c491e/video-call'
-            url={pushRtmpUrl}
-            mode="RTC"
-            autopush={true}
-            style={fullClicked ? fullScreenStyle : littleScreen}
-          />
+            <live-pusher
+              beauty={9}
+              // url='rtmp://39.98.67.142:1935/live/VIDEO_CALL_SERVER_6fd79c5887aa4ee28b1aa8729b5c491e/video-call'
+              url={pushRtmpUrl}
+              mode="RTC"
+              object-fit='fillCrop'
+              autopush={true}
+              style={fullClicked ? fullScreenStyle : littleScreen}
+            />
+
         </View>
         <View
           onClick={this.switchFull}
           style={fullClicked ? littleScreen : fullScreenStyle}
         >
           <live-player
-            src={pullRtmpUrl}
-            // src='rtmp://39.98.67.142:1935/live/VIDEO_CALL_CUSTOMER_123456/'
-            mode="RTC"
-            autoplay
-            binderror="error"
-            style={fullClicked ? littleScreen : fullScreenStyle}
-          />
+              src={pullRtmpUrl}
+              // src='rtmp://39.98.67.142:1935/live/VIDEO_CALL_CUSTOMER_123456/'
+              mode="RTC"
+              object-fit='fillCrop'
+              autoplay
+              binderror="error"
+              style={fullClicked ? littleScreen : fullScreenStyle}
+            />
+
         </View>
         <Image
           onClick={this.onClose}
