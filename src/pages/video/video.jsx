@@ -60,6 +60,7 @@ class VideoPage extends Component {
     })
     // 客服
     if(isServer==='TRUE'){
+      console.log(this.$router.params.videoCallId)
       api.get(`/servers/videos/${this.$router.params.videoCallId}`).then(r => {
         if (r.data.result) {
           // 有遗留电话
@@ -67,6 +68,7 @@ class VideoPage extends Component {
             // 挂断
             api.del(`servers/videos/${r.data.data.videoCallId}`).then(res => {
               if (res.data.result) {
+                console.log(this.$router.params.videoCallId)
                 api.get(`/servers/videos/${this.$router.params.videoCallId}`).then(response => {
                   // 再次接通成功
                   if (response.data.result) {
@@ -79,8 +81,8 @@ class VideoPage extends Component {
                         })
                         this.setState({
                           videoCallId: response.data.data.videoCallId,
-                          pullRtmpUrl: response.data.data.pullRtmpUrl,
-                          pushRtmpUrl: response.data.data.pushRtmpUrl
+                          pushRtmpUrl: response.data.data.pushRtmpUrl,
+                          pullRtmpUrl: response.data.data.pullRtmpUrl
                         })
                         setTimer(response.data.data.videoCallId)
                       }
@@ -101,8 +103,8 @@ class VideoPage extends Component {
                 console.log(r.data.data)
                 this.setState({
                   videoCallId: r.data.data.videoCallId,
-                  pullRtmpUrl: r.data.data.pullRtmpUrl,
-                  pushRtmpUrl: r.data.data.pushRtmpUrl
+                  pushRtmpUrl: r.data.data.pushRtmpUrl,
+                  pullRtmpUrl: r.data.data.pullRtmpUrl
                 })
                 setTimer(r.data.data.videoCallId)
               }
@@ -124,12 +126,6 @@ class VideoPage extends Component {
                 })
               },4000)
               wx.setStorageSync('calling', '1');
-              this.setState({
-                videoCallId: "",
-                pullRtmpUrl:'',
-                pushRtmpUrl:'',
-                fullClicked:false
-              })
             }
           })
         }

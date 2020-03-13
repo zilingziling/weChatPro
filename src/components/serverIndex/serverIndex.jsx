@@ -12,8 +12,6 @@ class  ServerIndex extends Component {
   }
   componentDidMount() {
     wx.setStorageSync('calling', '1');
-   let calling= wx.getStorageSync('calling');
-   console.log(calling)
     // 音频
     myAudio.src = `${baseUrl}incoming.wav`
     myAudio.loop = true
@@ -23,8 +21,10 @@ class  ServerIndex extends Component {
           this.setState({
             callList: r.data.data
           })
-          if (r.data.data.length > 0&&calling==='1') {
+          if (r.data.data.length > 0&&wx.getStorageSync('calling')==='1') {
             myAudio.play()
+          }else {
+            myAudio.stop()
           }
         }
       })

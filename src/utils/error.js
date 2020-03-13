@@ -6,10 +6,8 @@ export const logError = (name, action, info) => {
   try {
     var device = JSON.stringify(deviceInfo)
   } catch (e) {
-    console.error('not support getSystemInfoSync api', err.message)
+    console.error('请求出错')
   }
-  let time = formatTime(new Date())
-  console.error(time, name, action, info, device)
   // if (typeof action !== 'object') {
   // fundebug.notify(name, action, info)
   // }

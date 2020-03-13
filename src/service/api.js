@@ -20,6 +20,7 @@ export default {
         ? { "content-type": contentType, Authorization: `Bearer ${token}` }
         : { "content-type": contentType },
       success(res) {
+        console.log(res.statusCode)
         if(res.statusCode ===401) {
           wx.login({
             success(resp) {
@@ -30,10 +31,10 @@ export default {
                   data: {js_code: resp.code},
                   method: 'GET',
                   success(response) {
-                    if (res.data.result) {
-                      wx.setStorageSync('token', res.data.data.accessToken)
-                      wx.setStorageSync('openid', res.data.data.openid)
-                      wx.setStorageSync('sessionKey', res.data.data.sessionKey)
+                    if (response.data.result) {
+                      wx.setStorageSync('token', response.data.data.accessToken)
+                      wx.setStorageSync('openid', response.data.data.openid)
+                      wx.setStorageSync('sessionKey', response.data.data.sessionKey)
                     }
                   }
                 })
