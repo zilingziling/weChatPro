@@ -37,7 +37,40 @@ class App extends Component {
 
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    const updateManager = wx.getUpdateManager()
+    // 检查小程序是否有新版本发布
+    updateManager.onCheckForUpdate(function(res){
+      // 请求完新版本的信息回调
+      if(res.hasUpdate){
+        wx.showModal({
+          title: '更新提示',
+          content: '检查到新版本，是否下载新版本并重启小程序？',
+          success:function(res){
+            if(res.confirm){
+              // 下载
+              self.downloadAndUpdate(updateManager)
+            }else if(res.cancel){
+              // 点击取消，做强制更新操作
+              wx.showModal({
+                title: '温馨提示',
+                content: '必须强制更新哦，旧版本无法正常使用',
+                showCancel:false,//隐藏取消按钮
+                confirmText:'确定更新',
+                success:function(res){
+                  if(res.confirm){
+                    // 再次调用下载，并重启
+                    self.downloadAndUpdate(updateManager)
+                  }
+                }
+              })
+
+            }
+          }
+        })
+      }
+    })
+  }
 
   componentDidShow () {}
 
